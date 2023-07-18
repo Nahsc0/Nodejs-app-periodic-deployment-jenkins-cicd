@@ -44,6 +44,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 // Add deployment steps here
+                 echo 'Deploying App...'
             }
         }
     }
@@ -51,6 +52,7 @@ pipeline {
     post {
         always {
             // Clean up or perform any post-build actions here
+             echo 'Performing post-build actions...'
         }
         success {
             echo 'Build and deployment were successful.'
