@@ -16,13 +16,19 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'npm i' // Use "npm ci" for a clean install of dependencies
+                sh 'cd client-side' // Use "npm ci" for a clean install of dependencies
+                sh 'npm i'
+                sh 'cd server-side'
+                sh 'npm i'
+                
             }
         }
 
         stage('Test') {
             steps {
-                sh 'npm test' // Run tests
+                 // Run tests
+                sh 'cd server-side'
+                sh 'npm test'
             }
             post {
                 success {
@@ -37,7 +43,10 @@ pipeline {
 
         stage('Build') {
             steps {
+                sh 'cd client-side'
                 sh 'npm run build' // Add your build commands here
+                sh 'cd server-side'
+                sh 'npm start'
             }
         }
 
