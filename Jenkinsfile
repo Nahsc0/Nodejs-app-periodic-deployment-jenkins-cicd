@@ -1,77 +1,50 @@
 pipeline {
     agent any
 
-    triggers {
-        cron('H 0 * * *') // This schedules the job to run daily at midnight
-    }
+    // triggers {
+    //     cron('H 0 * * *') // This schedules the job to run daily at midnight
+    // }
 
     stages {
-        stage('Checkout') {
+
+        stage("Cleanup Workspace"){
             steps {
-                cleanWs() // Clean workspace before checking out the code
-                git branch: 'main', credentialsId: 'deploy', url: 'https://github.com/DevBarham/Nodejs-app-periodic-deployment-jenkins-cicd'
-                checkout scm
+                cleanWs()
+            }
+        }
+        
+        stage("Checkout from SCM"){
+            steps {
+                git branch: 'main', credentialsId: 'github', url: 'https://github.com/Nahsc0/Nodejs-app-periodic-deployment-jenkins-cicd'
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                sh 'cd Nodejs-app-periodic-deployment-jenkins-cicd'
-                sh 'cd client-side' // Use "npm ci" for a clean install of dependencies
-                sh 'npm i'
-                sh 'cd server-side'
-                sh 'npm i'
+                script {
+                    sh "ls"
+                }
                 
             }
         }
 
         stage('Test') {
             steps {
-                 // Run tests
-                sh 'cd Nodejs-app-periodic-deployment-jenkins-cicd'
-                sh 'cd server-side'
-                sh 'npm test'
-            }
-            post {
-                success {
-                    echo 'Tests passed. Proceeding with the build...'
-                }
-                failure {
-                    echo 'Tests failed. Aborting the build.'
-                    error 'Tests failed.'
-                }
+                echo "Test App..."
             }
         }
 
         stage('Build') {
             steps {
-                sh 'cd Nodejs-app-periodic-deployment-jenkins-cicd'
-                sh 'cd client-side'
-                sh 'npm run build' // Add your build commands here
-                sh 'cd server-side'
-                sh 'npm start'
+                echo "Build App..."
             }
         }
 
         stage('Deploy') {
             steps {
-                // Add deployment steps here
                  echo 'Deploying App...'
             }
         }
     }
 
-    post {
-        always {
-            // Clean up or perform any post-build actions here
-             echo 'Performing post-build actions...'
-        }
-        success {
-            echo 'Build and deployment were successful.'
-        }
-        failure {
-            echo 'Build or deployment failed.'
-            error 'Build or deployment failed.'
-        }
-    }
 }
