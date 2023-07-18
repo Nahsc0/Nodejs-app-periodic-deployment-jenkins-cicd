@@ -16,7 +16,7 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'npm ci' // Use "npm ci" for a clean install of dependencies
+                sh 'npm i' // Use "npm ci" for a clean install of dependencies
             }
         }
 
