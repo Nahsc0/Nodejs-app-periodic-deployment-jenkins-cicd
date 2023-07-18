@@ -22,7 +22,10 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 script {
-                    sh "ls"
+                    sh '''
+                        cd server-side
+                        npm install
+                    '''
                 }
                 
             }
@@ -31,12 +34,6 @@ pipeline {
         stage('Test') {
             steps {
                 echo "Test App..."
-            }
-        }
-
-        stage('Build') {
-            steps {
-                echo "Build App..."
             }
         }
 
